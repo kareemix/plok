@@ -3,6 +3,9 @@
 
 #include <ncurses.h>
 
+#define CTRL_Q 17
+#define CTRL_S 19
+
 int main(int argc, char** argv) {
 
     FILE* fp;
@@ -43,8 +46,7 @@ int main(int argc, char** argv) {
 
     action = getch();
 
-    while(action != 17) {
-        // printf("%c", action);
+    while(action != CTRL_Q) {
         switch (action) {
             case KEY_UP:
                 coords[0]--;
@@ -65,7 +67,9 @@ int main(int argc, char** argv) {
             case KEY_DC:
                 delch();
                 break;
-            case 19:
+            case 10:
+                break;
+            case CTRL_S:
                 fseek(fp, 0, SEEK_SET);
                 for(int y = 0; y < getmaxy(stdscr); y++) {
                     mvinstr(y, 0, line);
@@ -79,7 +83,7 @@ int main(int argc, char** argv) {
         }
         if(coords[0] < 0) coords[0] = 0;
         if(coords[1] < 0) coords[1] = 0;
-        if(coords[1] > maxx) coords[1] = maxx - 1;
+        if(coords[1] > maxx - 1) coords[1] = maxx - 1;
         move(coords[0], coords[1]);
         refresh();
         action = getch();
