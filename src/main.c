@@ -5,6 +5,8 @@
 
 #define CTRL_Q 17
 #define CTRL_S 19
+#define ENTER 10
+#define TAB 9
 
 int main(int argc, char** argv) {
 
@@ -74,11 +76,11 @@ int main(int argc, char** argv) {
             case KEY_DC:
                 delch();
                 break;
-            case 10:
+            case ENTER:
                 coords[0]++;
                 coords[1] = 0;
                 break;
-            case 9:
+            case TAB:
                 coords[1] += 4;
                 insstr("    ");
                 break;
