@@ -11,7 +11,6 @@
 int main(int argc, char** argv) {
 
     FILE* fp;
-    FILE* test = fopen("test", "w");
     char* filename;
     char* line; 
     int coords[2] = {0, 0};
@@ -111,6 +110,8 @@ int main(int argc, char** argv) {
         refresh();
         action = getch();
     }
+
+    free(line);
 
     fclose(fp);
     endwin();
