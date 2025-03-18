@@ -9,6 +9,7 @@
 int main(int argc, char** argv) {
 
     FILE* fp;
+    char* filename;
     char* line; 
     int coords[2] = {0, 0};
     int action;
@@ -16,16 +17,17 @@ int main(int argc, char** argv) {
 
     if(argc <= 1) {
         printf("Please specify file\n");
-        exit(1);
+        return -1;
     }
 
-    fp = fopen(argv[1], "r+");
+    filename = argv[1];
+    fp = fopen(filename, "r+");
 
     if(!fp) {
-        fp = fopen(argv[1], "w+");
+        fp = fopen(filename, "w+");
         if(!fp) {
             printf("Error opening file\n");
-            exit(1);
+            return -1;
         }
     }
 
@@ -37,6 +39,11 @@ int main(int argc, char** argv) {
     maxx = getmaxx(stdscr);
 
     line = malloc(sizeof(char) * maxx);
+
+    if(!line) {
+        printf("Error allocating memory\n");
+        return -1;
+    }
 
     while(fgets(line, maxx, fp) != NULL) {
         printw("%s", line);
@@ -68,6 +75,12 @@ int main(int argc, char** argv) {
                 delch();
                 break;
             case 10:
+                coords[0]++;
+                coords[1] = 0;
+                break;
+            case 9:
+                coords[1] += 4;
+                insstr("    ");
                 break;
             case CTRL_S:
                 fseek(fp, 0, SEEK_SET);
