@@ -21,6 +21,7 @@ int main(int argc, char** argv) {
         printf("Error opening file\n");
         exit(1);
     }
+    printf("\a");
 
     initscr();
     raw();
@@ -35,7 +36,7 @@ int main(int argc, char** argv) {
 
     action = getch();
 
-    while(action != 'Q') {
+    while(action != 17) {
         // printf("%c", action);
         switch (action) {
             case KEY_UP:
@@ -57,6 +58,9 @@ int main(int argc, char** argv) {
             case KEY_DC:
                 delch();
                 break;
+            case 19:
+                printw("asdfsadf");
+            break;
             default:
                 coords[1]++;
                 insch((char)action);
@@ -64,6 +68,7 @@ int main(int argc, char** argv) {
         }
         if(coords[0] < 0) coords[0] = 0;
         if(coords[1] < 0) coords[1] = 0;
+        if(coords[1] > 80) coords[1] = 80;
         move(coords[0], coords[1]);
         refresh();
         action = getch();
