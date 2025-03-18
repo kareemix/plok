@@ -6,9 +6,10 @@
 int main(int argc, char** argv) {
 
     FILE* fp;
-    char line[80];
+    char* line; 
     int coords[2] = {0, 0};
     int action;
+    int maxx;
 
     if(argc <= 1) {
         printf("Please specify file\n");
@@ -21,14 +22,17 @@ int main(int argc, char** argv) {
         printf("Error opening file\n");
         exit(1);
     }
-    printf("\a");
 
     initscr();
     raw();
     noecho();
     keypad(stdscr, TRUE);
 
-    while(fgets(line, 80, fp) != NULL) {
+    maxx = getmaxx(stdscr);
+
+    line = malloc(sizeof(char) * maxx);
+
+    while(fgets(line, maxx, fp) != NULL) {
         printw("%s", line);
     }
 
@@ -59,8 +63,7 @@ int main(int argc, char** argv) {
                 delch();
                 break;
             case 19:
-                printw("asdfsadf");
-            break;
+                break;
             default:
                 coords[1]++;
                 insch((char)action);
@@ -68,7 +71,7 @@ int main(int argc, char** argv) {
         }
         if(coords[0] < 0) coords[0] = 0;
         if(coords[1] < 0) coords[1] = 0;
-        if(coords[1] > 80) coords[1] = 80;
+        if(coords[1] > maxx) coords[1] = maxx - 1;
         move(coords[0], coords[1]);
         refresh();
         action = getch();
