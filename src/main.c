@@ -11,11 +11,13 @@
 int main(int argc, char** argv) {
 
     FILE* fp;
+    FILE* test = fopen("test", "w");
     char* filename;
     char* line; 
     int coords[2] = {0, 0};
     int action;
     int maxx;
+    int maxy;
 
     if(argc <= 1) {
         printf("Please specify file\n");
@@ -39,6 +41,7 @@ int main(int argc, char** argv) {
     keypad(stdscr, TRUE);
 
     maxx = getmaxx(stdscr);
+    maxy = getmaxy(stdscr);
 
     line = malloc(sizeof(char) * maxx);
 
@@ -86,8 +89,13 @@ int main(int argc, char** argv) {
                 break;
             case CTRL_S:
                 fseek(fp, 0, SEEK_SET);
-                for(int y = 0; y < getmaxy(stdscr); y++) {
+                for(int y = 0; y < maxy; y++) {
                     mvinstr(y, 0, line);
+                    for(int i = maxx - 1; i > 0; i--) {
+                        if(line[i] == ' ')
+                            line[i] = '\0';
+                        else break;
+                    }
                     fprintf(fp, "%s\n", line);
                 }
                 break;
@@ -104,6 +112,7 @@ int main(int argc, char** argv) {
         action = getch();
     }
 
+    fclose(fp);
     endwin();
 
     return 0;
