@@ -16,11 +16,14 @@ int main(int argc, char** argv) {
         exit(1);
     }
 
-    fp = fopen(argv[1], "a+");
+    fp = fopen(argv[1], "r+");
 
     if(!fp) {
-        printf("Error opening file\n");
-        exit(1);
+        fp = fopen(argv[1], "w+");
+        if(!fp) {
+            printf("Error opening file\n");
+            exit(1);
+        }
     }
 
     initscr();
@@ -63,6 +66,11 @@ int main(int argc, char** argv) {
                 delch();
                 break;
             case 19:
+                fseek(fp, 0, SEEK_SET);
+                for(int y = 0; y < getmaxy(stdscr); y++) {
+                    mvinstr(y, 0, line);
+                    fprintf(fp, "%s\n", line);
+                }
                 break;
             default:
                 coords[1]++;
@@ -77,7 +85,6 @@ int main(int argc, char** argv) {
         action = getch();
     }
 
-    refresh();
     endwin();
 
     return 0;
