@@ -13,6 +13,8 @@ release:
 	$(CC) $(SRC_DIR)/main.c -o $(REL_DIR)/plok/plok $(CFLAGS) -O2
 	tar -czvf $(REL_DIR)/plok.tar.gz $(REL_DIR)/plok
 
-clean:
+cleanbin:
 	rm $(BLD_DIR)/plok
+
+cleanrel:
 	rm $(REL_DIR)/plok/plok
