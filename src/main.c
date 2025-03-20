@@ -17,6 +17,8 @@ int main(int argc, char** argv) {
     int action;
     int maxx;
     int maxy;
+    char c;
+    int linecount = 0;
 
     if(argc <= 1) {
         printf("Please specify file\n");
@@ -29,7 +31,7 @@ int main(int argc, char** argv) {
     if(!fp) {
         fp = fopen(filename, "w+");
         if(!fp) {
-            printf("Error opening file\n");
+            printf("Error opening file - exiting...\n");
             return -1;
         }
     }
@@ -45,9 +47,28 @@ int main(int argc, char** argv) {
     line = malloc(sizeof(char) * maxx);
 
     if(!line) {
-        printf("Error allocating memory\n");
+        fclose(fp);
+        endwin();
+        printf("Error allocating memory - exiting...\n");
         return -1;
     }
+
+    c = fgetc(fp);
+
+    while(c != EOF) {
+        if(c == '\n') linecount++;
+        c = getc(fp);
+    }
+
+    if(linecount >= maxy) {
+        free(line);
+        fclose(fp);
+        endwin();
+        printf("File contains too many lines - exiting...\n");
+        return -1;
+    }
+
+    fseek(fp, 0, SEEK_SET);
 
     while(fgets(line, maxx, fp) != NULL) {
         printw("%s", line);
